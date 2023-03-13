@@ -1,0 +1,64 @@
+\documentclass[fontset=windows]{article}
+\title{Spaceship Titanic 报告}
+\author{162050127 颜劭铭}
+\date{\zhtoday}
+\usepackage{ctex}
+\usepackage{xltxtra}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{mathdots}
+\usepackage{amssymb}
+\usepackage{cite}
+\usepackage{appendix}
+\usepackage{array}
+\usepackage{subfigure}
+\usepackage{subfiles}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage[subfigure]{tocloft}
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\geometry{a4paper,left=2cm,right=2cm,top=2cm,bottom=2cm}
+\graphicspath{{image/}}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\clearpage
+
+\section{背景}
+
+    \subfile{sections/section1.tex}
+
+\section{数据分布可视化}
+
+    \subfile{sections/section2.tex}
+
+\section{数据预处理}
+
+    \subfile{sections/section3.tex}
+
+\section{特征分析}
+
+    \subfile{sections/section4.tex}
+
+\section{选用模型}
+
+    \subfile{sections/section5.tex}
+
+\section{训练模型}
+
+    \subfile{sections/section6.tex}
+
+\section{训练结果}
+
+    \subfile{sections/section7.tex}
+
+\section{回顾总结}
+
+    \subfile{sections/section8.tex}
+
+\end{document}

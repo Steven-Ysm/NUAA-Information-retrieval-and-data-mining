@@ -1,0 +1,88 @@
+\documentclass[../main.tex]{subfiles} 
+\usepackage{ctex}
+\usepackage{xltxtra}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{mathdots}
+\usepackage{amssymb}
+\usepackage{cite}
+\usepackage{appendix}
+\usepackage{array}
+\usepackage{subfigure}
+\begin{document}
+
+    \subsection{分类算法}
+
+        \subsubsection{SVC}
+
+            SVM即Support Vector Machine，而SVC也就是用于分类的支持向量机模型。
+
+            首先在样本空间中，由于通常面对的就是一个二分类问题，因此需要寻找一个用于划分的鲁棒性最强的超平面，其可以被定义为：
+
+            \begin{equation*}
+                w^Tx+b = 0
+            \end{equation*}
+
+            由点到超平面的距离公式，可以得到优化目标：
+
+            \begin{equation*}
+                \min \limits_{w,b} \quad \frac{1}{2} \|w\|^2
+            \end{equation*}
+
+            而通常样本数据是交杂在一起的，此时该分类问题需要使用软间隔的SVM。软间隔的基本思想就是：允许模型犯错误，并不要求完全的线性可分，样本只在一定范围外记入错误，其他犯错的样本视而不见.
+
+            可以推导出SVM模型的一般形式如下：
+
+            \begin{equation*}
+                \begin{aligned}
+                &\min \limits_{f} \Omega(f) + c \sum \limits_{i=1}^m l(f(x_i),y_i)\\
+                &\text{s.t.} \quad y_i(w^Tx_i + b) \geqslant 1 , i = 1,2,\cdots,n
+                \end{aligned}
+            \end{equation*}
+
+            其中$\Omega$指代结构风险，例如间隔距离，c指的是惩罚因子，$l$指的是经验风险，用来描述模型与训练数据的契合程度，可以通过调整惩罚因子c来描述允许模型犯错误的程度，c越小就是允许犯更多的错误.
+
+            同时SVM的训练过程中可以使用核函数进行非线性分类，在这里使用的是高斯核。因为高斯核可以把数据拓展到无限维，在无限维的时候数据是更有可能可分的，所以认为高斯核在该问题上的训练效果会比线性核训练的 SVM 效果好一点.
+
+        \subsubsection{Decision Tree}
+
+            相比起其他模型，决策树应该是一种较为具体的方法，在训练过程中根据信息增益、增益率或是基尼指数等其他指标为标准进行数据的划分，生成一种树形结构，其中每个内部节点表示一个属性上的判断，每个分支代表一个判断结果的输出，最后每个叶节点代表一种分类结果。
+            同时决策树还是后续集成学习AdaBoost，CatBoost，Random Forest等模型的基础。
+        
+        \subsubsection{Naive Bayes}
+
+            朴素贝叶斯和其他绝大多数的分类算法都不同。对于大多数的分类算法，比如决策树,KNN,逻辑回归，支持向量机等，他们都是判别方法，也就是直接学习出特征输出Y和特征X之间的关系。但是朴素贝叶斯却是生成方法，也就是直接找出特征输出Y和特征X的联合分布。
+            准确来说，根据已有样本进行贝叶斯估计学习出先验概率P(Y)和条件概率P(X|Y)，进而求出联合分布概率P(XY),最后利用贝叶斯定理求解P(Y|X)，也就是说，它尝试去找到底这个数据是怎么生成的，然后再进行分类。哪个类别最有可能产生这个标签特征，该数据就属于那个类别。
+
+    \subsection{聚类算法}
+    
+        \subsubsection{KNN}
+
+            KNN，即K Nearest Neighbors。KNN的原理非常简单，就是对于每个新的需要预测的样本查看离它最近的k个样本的类别来判断该样本是什么类别。距离度量通常使用欧氏距离。
+
+    \subsection{集成学习}
+
+        集成方式主要分为两大类：并行和串行。其中并行主要有使用随机子样本的Bagging和随机子空间的随机森林，串行主要使用Boosting，代表算法有AdaBoost等。
+
+        \subsubsection{Random Forest}
+
+            随机森林的子模型是决策树。
+        
+            \textcircled{1}在每一次训练的过程中有放回地随机选择N个样本训练一个决策树.
+        
+            \textcircled{2}随机选取m个属性，根据属性选取的策略（如信息增益、基尼指数）选择一个属性，对于决策树的结点进行分裂.
+    
+            \textcircled{3}重复步骤2直到不能分裂.
+    
+            \textcircled{4}重复步骤1、2、3建立大量决策树，构建随机森林.
+
+        \subsubsection{CatBoost}
+
+            CatBoost的基础是AdaBoost，而AdaBoost首先先将分布的权重设为相等的$\frac{1}{m}$，然后根据设计的训练轮数T，在每一轮的训练中，根据之前的分布从D中训练出基模型，计算出加权错误率，并依据加权错误率计算出样本的权重，错误的样本的权重更大，并依据样本的权重更新分布，进入下一轮训练。
+        
+            CatBoost在建立树形结构的过程中使用的是构建对称（平衡）树。在每一步中，前一棵树的叶子都使用相同的条件进行拆分，并且选择损失最低的特征分割对并将其用于所有级别的节点，因此CatBoost有正则作用且预测极快。
+
+            除此以外，CatBoost提供更强大的对类别特征的支持，直接支持字符串类型的类别特征，无需预处理，但是在前文中已经提前进行了类别编码，因此后续重新尝试了不提前进行类别编码直接进行训练，并观察对比两者的训练效果。
+
+\end{document}
